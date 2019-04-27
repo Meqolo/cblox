@@ -27,8 +27,16 @@ namespace cblox {
 			curl_easy_cleanup(curl);
 		}
 		curl_global_cleanup();
-		std::cout << typeid(content).name() << '\n';
 		return content;
+	}
+
+	json User::GetGroups(int userId) {
+		std::string uid = std::to_string(userId);
+		string url = "http://api.roblox.com/users/" + uid;
+		url = url + "/groups";
+		std::string strdat = Http::Get(url);
+		json data = json::parse(strdat);
+		return data;
 	}
 
 	json User::GetFriends(int userId) {
