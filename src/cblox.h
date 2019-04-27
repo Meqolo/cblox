@@ -11,6 +11,9 @@ namespace cblox {
 	public:
 		static json GetFriends(int userId);
 		static json GetGroups(int userId);
+		static json GetUserFromId(int userId);
+		static json GetUserFromName(string username);
+		static json GetUserAvatar(int userId);
 	};
 	class Group {
 	public:
