@@ -3,6 +3,7 @@
 #include <curl/curl.h>
 #include <iostream>
 #include <typeinfo>
+#include <regex>
 using namespace std;
 
 namespace cblox {
@@ -73,6 +74,32 @@ namespace cblox {
 		std::string strdat = Http::Get(url);
 		json data = json::parse(strdat);
 		return data;
+	}
+
+	json User::GetUserProfile(int userId) {
+		std::string uid = std::to_string(userId);
+		string url = "https://www.roblox.com/users/profile/profileheader-json?userId=" + uid;
+		std::string strdat = Http::Get(url);
+		json jdata = json::parse(strdat);
+
+		json ndata = {};
+		ndata["Status"] = jdata["UserStatus"];
+		ndata["PrevUsernames"] = jdata["PreviousUserNames"];
+		ndata["Followers"] = jdata["FollowersCount"];
+		ndata["Following"] = jdata["FollowingsCount"];
+		ndata["Headshot"] = jdata["HeadShotImage"]["Url"];
+
+		if (jdata["UserMembershipType"] == 0) {
+			ndata["Membership"] = "NBC";
+		} else if (jdata["UserMembershipType"] == 1) {
+			ndata["Membership"] = "BC";
+		} else if (jdata["UserMembershipType"] == 2) {
+			ndata["Membership"] = "TBC";
+		} else if (jdata["UserMembershipType"] == 3) {
+			ndata["Membership"] = "OBC";
+		}
+
+		return ndata;
 	}
 
 	bool User::HasAsset(int groupId, int assetId) {

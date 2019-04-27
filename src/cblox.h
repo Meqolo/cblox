@@ -17,6 +17,7 @@ namespace cblox {
 		static json GetFollowers(int userId);
 		static json GetFollowing(int userId);
 		static json GetUsersGames(int userId);
+		static json GetUserProfile(int userId);
 		static bool HasAsset(int userId, int assetId);
 		static bool HasGamepass(int userId, int assetId);
 	};
@@ -30,6 +31,8 @@ namespace cblox {
 	class Other {
 	public:
 		static json GetGamePassInfo(int assetId);
+		static json SearchGroups(string keyword);
+		static json SearchUsers(string keyword);
 	};
 	class Http {
 	public:
