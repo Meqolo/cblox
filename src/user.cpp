@@ -47,4 +47,62 @@ namespace cblox {
 		json data = json::parse(strdat);
 		return data;
 	}
+
+	json User::GetFollowers(int userId) {
+		std::string uid = std::to_string(userId);
+		string url = "https://friends.roblox.com/v1/users/" + uid;
+		url = url + "/followers";
+		std::string strdat = Http::Get(url);
+		json data = json::parse(strdat);
+		return data;
+	}
+
+	json User::GetFollowing(int userId) {
+		std::string uid = std::to_string(userId);
+		string url = "https://friends.roblox.com/v1/users/" + uid;
+		url = url + "/following";
+		std::string strdat = Http::Get(url);
+		json data = json::parse(strdat);
+		return data;
+	}
+
+	json User::GetUsersGames(int groupId) {
+		std::string uid = std::to_string(groupId);
+		string url = "https://games.roblox.com/v2/users/" + uid;
+		url = url + "/games?limit=100";
+		std::string strdat = Http::Get(url);
+		json data = json::parse(strdat);
+		return data;
+	}
+
+	bool User::HasAsset(int groupId, int assetId) {
+		std::string uid = std::to_string(groupId);
+		std::string aid = std::to_string(assetId);
+		string url = "https://api.roblox.com/ownership/hasasset?userId=" + uid;
+		url = url + "&assetId=";
+		url = url + aid;
+		std::string strdat = Http::Get(url);
+		bool data = false;
+		if (strdat == "true") {
+			data = true;
+		} else if (strdat == "false") {
+			data = false;
+		}
+		return data;
+	}
+
+	bool User::HasGamepass(int groupId, int assetId) {
+		std::string uid = std::to_string(groupId);
+		std::string aid = std::to_string(assetId);
+		string url = "https://inventory.roblox.com/v1/users/" + uid;
+		url = url + "/items/GamePass/";
+		url = url + aid;
+		std::string strdat = Http::Get(url);
+		json jdat = json::parse(strdat);
+		bool data = false;
+		if (jdat["data"].size() > 0) {
+			data = true;
+		}
+		return data;
+	}
 };
