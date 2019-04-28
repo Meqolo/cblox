@@ -101,7 +101,7 @@ extern "C" {
 #endif
 
 #if defined(BUILDING_LIBCURL) || defined(CURL_STRICTER)
-typedef struct Curl_easy CURL;
+typedef struct Curl_easy curl;
 typedef struct Curl_share CURLSH;
 #else
 typedef void CURL;
@@ -1763,10 +1763,10 @@ typedef enum {
   /* Set stream weight, 1 - 256 (default is 16) */
   CINIT(STREAM_WEIGHT, LONG, 239),
 
-  /* Set stream dependency on another CURL handle */
+  /* Set stream dependency on another curl handle */
   CINIT(STREAM_DEPENDS, OBJECTPOINT, 240),
 
-  /* Set E-xclusive stream dependency on another CURL handle */
+  /* Set E-xclusive stream dependency on another curl handle */
   CINIT(STREAM_DEPENDS_E, OBJECTPOINT, 241),
 
   /* Do not send any tftp option requests to the server */
@@ -1900,7 +1900,7 @@ typedef enum {
   /* Time in ms between connection upkeep calls for long-lived connections. */
   CINIT(UPKEEP_INTERVAL_MS, LONG, 281),
 
-  /* Specify URL using CURL URL API. */
+  /* Specify URL using curl URL API. */
   CINIT(CURLU, OBJECTPOINT, 282),
 
   /* add trailing data just after no more data is available */
