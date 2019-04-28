@@ -18,6 +18,7 @@ namespace cblox {
 		static json GetFollowing(int userId);
 		static json GetUsersGames(int userId);
 		static json GetUserProfile(int userId);
+		static json GetPresence(int userId);
 		static bool HasAsset(int userId, int assetId);
 		static bool HasGamepass(int userId, int assetId);
 	};
@@ -27,6 +28,7 @@ namespace cblox {
 		static json GetGroupAllies(int groupId);
 		static json GetGroupGames(int groupId);
 		static json GetWallPosts(int groupId);
+		//static json SetRank(int groupId, int userId, int roleId);
 	};
 	class Other {
 	public:
@@ -37,5 +39,8 @@ namespace cblox {
 	class Http {
 	public:
 		static string Get(string url);
+		static string Post(string url, string ndata);
+		static void UpdateXcsrf();
+		static void Login(string cookie);
 	};
 }

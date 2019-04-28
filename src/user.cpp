@@ -76,6 +76,19 @@ namespace cblox {
 		return data;
 	}
 
+	json User::GetPresence(int userId) {
+		std::string uid = std::to_string(userId);
+		char fdata[100] = "{'userIds':[";
+		char bdata[100];
+		char cdata[100] = "]}";
+		strcpy_s(bdata, sizeof bdata, uid.c_str());
+		strcat_s(fdata, sizeof fdata, bdata);
+		strcat_s(fdata, sizeof fdata, cdata);
+		string strdat = cblox::Http::Post("https://presence.roblox.com/v1/presence/users", fdata);
+		json data = json::parse(strdat);
+		return data;
+	}
+
 	json User::GetUserProfile(int userId) {
 		std::string uid = std::to_string(userId);
 		string url = "https://www.roblox.com/users/profile/profileheader-json?userId=" + uid;
@@ -88,15 +101,21 @@ namespace cblox {
 		ndata["Followers"] = jdata["FollowersCount"];
 		ndata["Following"] = jdata["FollowingsCount"];
 		ndata["Headshot"] = jdata["HeadShotImage"]["Url"];
+		int val = jdata["UserMembershipType"];
 
-		if (jdata["UserMembershipType"] == 0) {
-			ndata["Membership"] = "NBC";
-		} else if (jdata["UserMembershipType"] == 1) {
+		switch (val) {
+		case 1:
 			ndata["Membership"] = "BC";
-		} else if (jdata["UserMembershipType"] == 2) {
+			break;
+		case 2:
 			ndata["Membership"] = "TBC";
-		} else if (jdata["UserMembershipType"] == 3) {
+			break;
+		case 3:
 			ndata["Membership"] = "OBC";
+			break;
+		default:
+			ndata["Membership"] = "NBC";
+
 		}
 
 		return ndata;

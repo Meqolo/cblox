@@ -32,7 +32,7 @@ namespace cblox {
 		url = url + "/games?limit=100";
 		std::string strdat = Http::Get(url);
 		json data = json::parse(strdat);
-		return data;
+		return data["data"];
 	}
 
 	json Group::GetWallPosts(int groupId) {
@@ -43,4 +43,18 @@ namespace cblox {
 		json data = json::parse(strdat);
 		return data;
 	}
+
+	/**json Group::SetRank(int groupId, int userId, int roleId) {
+		std::string gid = std::to_string(groupId);
+		std::string uid = std::to_string(userId);
+		std::string rid = std::to_string(roleId);
+		string url = "https://www.roblox.com/groups/api/change-member-rank?groupId=" + gid;
+		url = url + "&newRoleSetId=";
+		url = url + rid; 
+		url = url + "&targetUserId=";
+		url = url + uid;
+		std::string strdat = Http::Post(url);
+		json data = json::parse(strdat);
+		return data;
+	}**/
 };
