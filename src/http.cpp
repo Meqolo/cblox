@@ -93,7 +93,7 @@ namespace cblox {
 			curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
 			curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
-
+			curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
 			res = curl_easy_perform(curl);
 			/* always cleanup */
@@ -132,7 +132,7 @@ namespace cblox {
 			/* always cleanup */
 			curl_easy_cleanup(curl);
 
-			regex csrf("X-CSRF-TOKEN: [A-z0-9]+");
+			regex csrf("X-CSRF-TOKEN: [A-z0-9/+-]+");
 			std::smatch m;
 			std::regex_search(header_string, m, csrf);
 			std::string regexcomp;

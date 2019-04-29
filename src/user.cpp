@@ -89,6 +89,25 @@ namespace cblox {
 		return data;
 	}
 
+	json User::ChangeDescription(string newDescription) {
+		char fdata[100] = "{Description: '";
+		char bdata[100] = "'}";
+		strcat_s(fdata, sizeof fdata, newDescription.c_str());
+		strcat_s(fdata, sizeof fdata, bdata);
+		std::cout << fdata;
+		string strdat = cblox::Http::Post("https://www.roblox.com/account/settings/description", fdata);
+		json data = {};
+
+		if (strdat.empty()) {
+			data["Status"] = "Success";
+		}
+		else {
+			data["Status"] = "Fail";
+		}
+
+		return data;
+	}
+
 	json User::GetUserProfile(int userId) {
 		std::string uid = std::to_string(userId);
 		string url = "https://www.roblox.com/users/profile/profileheader-json?userId=" + uid;
