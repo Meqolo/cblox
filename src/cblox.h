@@ -28,7 +28,7 @@ namespace cblox {
 		static json GetGroupAllies(int groupId);
 		static json GetGroupGames(int groupId);
 		static json GetWallPosts(int groupId);
-		//static json SetRank(int groupId, int userId, int roleId);
+		static json SetRank(int groupId, int userId, int roleId);
 	};
 	class Other {
 	public:

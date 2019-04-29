@@ -44,7 +44,7 @@ namespace cblox {
 		return data;
 	}
 
-	/**json Group::SetRank(int groupId, int userId, int roleId) {
+	json Group::SetRank(int groupId, int userId, int roleId) {
 		std::string gid = std::to_string(groupId);
 		std::string uid = std::to_string(userId);
 		std::string rid = std::to_string(roleId);
@@ -53,8 +53,8 @@ namespace cblox {
 		url = url + rid; 
 		url = url + "&targetUserId=";
 		url = url + uid;
-		std::string strdat = Http::Post(url);
+		std::string strdat = Http::Post(url, "");
 		json data = json::parse(strdat);
 		return data;
-	}**/
+	}
 };

@@ -62,7 +62,6 @@ namespace cblox {
 		struct WriteThis wt;
 		static char data[100];
 		strcpy_s(data, sizeof data, ndata.c_str());
-		std::cout << data;
 		wt.readptr = data;
 		wt.sizeleft = strlen(data);
 		res = curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -95,7 +94,7 @@ namespace cblox {
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
 			curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
 
-			
+
 			res = curl_easy_perform(curl);
 			/* always cleanup */
 			curl_easy_cleanup(curl);
@@ -116,10 +115,10 @@ namespace cblox {
 		res = curl_global_init(CURL_GLOBAL_DEFAULT);
 		struct curl_slist *chunk = NULL;
 		curl = curl_easy_init();
-
 		std::string header_string;
 		if (curl) {
 			std::string chead = "Cookie: " + Cookie;
+			chunk = curl_slist_append(chunk, "Transfer-Encoding: chunked");
 			chunk = curl_slist_append(chunk, chead.c_str());
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 			curl_easy_setopt(curl, CURLOPT_URL, "https://www.roblox.com/favorite/toggle");
@@ -138,7 +137,6 @@ namespace cblox {
 			std::regex_search(header_string, m, csrf);
 			std::string regexcomp;
 			for (auto v : m) {
-				std::cout << v; 
 				regexcomp = v;
 			}
 			std::string delimiter = ": ";
