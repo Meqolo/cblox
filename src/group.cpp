@@ -57,4 +57,39 @@ namespace cblox {
 		json data = json::parse(strdat);
 		return data;
 	}
+
+	json Group::ChangeRank(int groupId, int userId, int by) {
+		json Roles = Group::GetRoles(groupId);
+		json UserGroups = User::GetGroups(userId);
+
+		for (int i = 0; i < UserGroups.size(); i++) {
+			if (UserGroups[i]["Id"] == groupId) {
+				for (int b = 0; b < Roles.size(); b++) {
+					if (UserGroups[i]["Role"] == Roles[b]["Name"]) {
+						json data = Group::SetRank(groupId, userId, Roles[b + by]["Id"]);
+						return data;
+					}
+				}
+			}
+		}
+	}
+
+	json Group::Promote(int groupId, int userId) {
+		json data = Group::ChangeRank(groupId, userId, 1);
+		return data;
+	}
+
+	json Group::Demote(int groupId, int userId) {
+		json data = Group::ChangeRank(groupId, userId, -1);
+		return data;
+	}
+
+	json Group::GetRoles(int groupId) {
+		std::string uid = std::to_string(groupId);
+		string url = "https://www.roblox.com/api/groups/" + uid;
+		url = url + "/RoleSets/";
+		std::string strdat = Http::Get(url);
+		json data = json::parse(strdat);
+		return data;
+	}
 };
