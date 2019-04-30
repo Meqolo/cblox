@@ -1,5 +1,5 @@
 #include <string>
-#include "nlohmann/detail/json.h"
+#include <nlohmann/detail/json.h>
 
 using json = nlohmann::json;
 
