@@ -15,7 +15,8 @@ target_compile_features(cblox
         PUBLIC cxx_auto_type
         PRIVATE cxx_variadic_templates)
 
-target_link_libraries(cblox)
+target_link_libraries(cblox
+        curl)
 
 install(TARGETS cblox EXPORT CbloxConfig
         ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
