@@ -13,4 +13,8 @@ set_target_properties(curl PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/libs/curl/include"
         )
 
+add_library(nlohmann_json INTERFACE IMPORTED)
+set_property(TARGET nlohmann_json PROPERTY
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/libs/nlohmann/include")
+
 add_subdirectory(cblox)

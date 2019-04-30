@@ -1,82 +1,84 @@
-#include <cblox/cblox.h>
+#include "cblox/user.h"
+#include "cblox/http.h"
 #include <string>
 #include <curl/curl.h>
 #include <iostream>
 #include <typeinfo>
 #include <regex>
+
 using namespace std;
 
 namespace cblox {
-    json User::GetGroups(int userId) {
+    json User::getGroups(int userId) {
         std::string uid = std::to_string(userId);
         string url = "http://api.roblox.com/users/" + uid;
         url = url + "/groups";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetFriends(int userId) {
+    json User::getFriends(int userId) {
         std::string uid = std::to_string(userId);
         string url = "http://api.roblox.com/users/" + uid;
         url = url + "/friends";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetUserFromId(int userId) {
+    json User::getUserFromId(int userId) {
         std::string uid = std::to_string(userId);
         string url = "http://api.roblox.com/users/" + uid;
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetUserFromName(string name) {
+    json User::getUserFromName(string name) {
         string url = "http://api.roblox.com/users/get-by-username?username=" + name;
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetUserAvatar(int userId) {
+    json User::getUserAvatar(int userId) {
         std::string uid = std::to_string(userId);
         string url = "https://avatar.roblox.com/v1/users/" + uid;
         url = url + "/avatar";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetFollowers(int userId) {
+    json User::getFollowers(int userId) {
         std::string uid = std::to_string(userId);
         string url = "https://friends.roblox.com/v1/users/" + uid;
         url = url + "/followers";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetFollowing(int userId) {
+    json User::getFollowing(int userId) {
         std::string uid = std::to_string(userId);
         string url = "https://friends.roblox.com/v1/users/" + uid;
         url = url + "/following";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetUsersGames(int groupId) {
+    json User::getUsersGames(int groupId) {
         std::string uid = std::to_string(groupId);
         string url = "https://games.roblox.com/v2/users/" + uid;
         url = url + "/games?limit=100";
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetPresence(int userId) {
+    json User::getPresence(int userId) {
         std::string uid = std::to_string(userId);
         char fdata[100] = "{'userIds':[";
         char bdata[100];
@@ -84,15 +86,33 @@ namespace cblox {
         strcpy_s(bdata, sizeof bdata, uid.c_str());
         strcat_s(fdata, sizeof fdata, bdata);
         strcat_s(fdata, sizeof fdata, cdata);
-        string strdat = cblox::Http::Post("https://presence.roblox.com/v1/presence/users", fdata);
+        string strdat = Http::post("https://presence.roblox.com/v1/presence/users", fdata);
         json data = json::parse(strdat);
         return data;
     }
 
-    json User::GetUserProfile(int userId) {
+    json User::changeDescription(const string &newDescription) {
+        char fdata[100] = "{Description: '";
+        char bdata[100] = "'}";
+        strcat_s(fdata, sizeof fdata, newDescription.c_str());
+        strcat_s(fdata, sizeof fdata, bdata);
+        std::cout << fdata;
+        string strdat = Http::post("https://www.roblox.com/account/settings/description", fdata);
+        json data = {};
+
+        if (strdat.empty()) {
+            data["Status"] = "Success";
+        } else {
+            data["Status"] = "Fail";
+        }
+
+        return data;
+    }
+
+    json User::getUserProfile(int userId) {
         std::string uid = std::to_string(userId);
         string url = "https://www.roblox.com/users/profile/profileheader-json?userId=" + uid;
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json jdata = json::parse(strdat);
 
         json ndata = {};
@@ -121,13 +141,13 @@ namespace cblox {
         return ndata;
     }
 
-    bool User::HasAsset(int groupId, int assetId) {
+    bool User::hasAsset(int groupId, int assetId) {
         std::string uid = std::to_string(groupId);
         std::string aid = std::to_string(assetId);
         string url = "https://api.roblox.com/ownership/hasasset?userId=" + uid;
         url = url + "&assetId=";
         url = url + aid;
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         bool data = false;
         if (strdat == "true") {
             data = true;
@@ -137,18 +157,18 @@ namespace cblox {
         return data;
     }
 
-    bool User::HasGamepass(int groupId, int assetId) {
+    bool User::hasGamepass(int groupId, int assetId) {
         std::string uid = std::to_string(groupId);
         std::string aid = std::to_string(assetId);
         string url = "https://inventory.roblox.com/v1/users/" + uid;
         url = url + "/items/GamePass/";
         url = url + aid;
-        std::string strdat = Http::Get(url);
+        std::string strdat = Http::get(url);
         json jdat = json::parse(strdat);
         bool data = false;
-        if (jdat["data"].size() > 0) {
+        if (!jdat["data"].empty()) {
             data = true;
         }
         return data;
     }
-};
+}

@@ -16,12 +16,13 @@ target_compile_features(cblox
         PRIVATE cxx_variadic_templates)
 
 target_link_libraries(cblox
-        curl)
+        curl
+        nlohmann_json)
 
 install(TARGETS cblox EXPORT CbloxConfig
-        ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})  # This is for Windows
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # This is for Windows
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(EXPORT CbloxConfig DESTINATION cmake)
 export(TARGETS cblox FILE CbloxConfig.cmake)
