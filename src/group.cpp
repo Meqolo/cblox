@@ -35,6 +35,21 @@ namespace cblox {
 		return data["data"];
 	}
 
+	json Group::Shout(int groupId, string message) {
+		std::string uid = std::to_string(groupId);
+		string url = "https://groups.roblox.com/v1/groups/" + uid;
+		url = url + "/status";
+		char fdata[100] = "{'message':'";
+		char bdata[100];
+		char cdata[100] = "'}";
+		strcpy_s(bdata, sizeof bdata, message.c_str());
+		strcat_s(fdata, sizeof fdata, bdata);
+		strcat_s(fdata, sizeof fdata, cdata);
+		std::string strdat = cblox::Http::Patch(url, fdata);
+		json data = json::parse(strdat);
+		return data;
+	}
+
 	json Group::GetWallPosts(int groupId) {
 		std::string uid = std::to_string(groupId);
 		string url = "https://groups.roblox.com/v2/groups/" + uid;

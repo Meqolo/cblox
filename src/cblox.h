@@ -33,6 +33,7 @@ namespace cblox {
 		static json ChangeRank(int groupId, int userId, int by);
 		static json Promote(int groupId, int userId);
 		static json Demote(int groupId, int userId);
+		static json Shout(int groupId, string message);
 		static json GetRoles(int groupId);
 	};
 	class Other {
@@ -45,6 +46,7 @@ namespace cblox {
 	public:
 		static string Get(string url);
 		static string Post(string url, string ndata);
+		static string Patch(string url, string ndata);
 		static void UpdateXcsrf();
 		static void Login(string cookie);
 	};

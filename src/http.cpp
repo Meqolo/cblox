@@ -93,7 +93,56 @@ namespace cblox {
 			curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
 			curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
-			curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+			//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+			res = curl_easy_perform(curl);
+			/* always cleanup */
+			curl_easy_cleanup(curl);
+
+		}
+		curl_global_cleanup();
+		return content;
+	}
+
+	string Http::Patch(string url, string ndata) {
+		CURL *curl;
+		CURLcode res;
+		std::string content;
+		struct WriteThis wt;
+		static char data[100];
+		strcpy_s(data, sizeof data, ndata.c_str());
+		wt.readptr = data;
+		wt.sizeleft = strlen(data);
+		res = curl_global_init(CURL_GLOBAL_DEFAULT);
+		struct curl_slist *chunk = NULL;
+		curl = curl_easy_init();
+
+		std::string header_string;
+
+		if (Cookie.empty()) {
+			return "You must be logged in";
+		}
+		if (Xcsrf.empty()) {
+			Http::UpdateXcsrf();
+		}
+		if (curl) {
+			std::string chead = "Cookie: " + Cookie;
+			std::string xhead = "X-CSRF-TOKEN: " + Xcsrf;
+			chunk = curl_slist_append(chunk, chead.c_str());
+			chunk = curl_slist_append(chunk, xhead.c_str());
+			chunk = curl_slist_append(chunk, "Transfer-Encoding: chunked");
+			chunk = curl_slist_append(chunk, "Content-Type: application/json");
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+			curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+			curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+			curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+			curl_easy_setopt(curl, CURLOPT_READDATA, &wt);
+			curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
+			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+			curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
+			//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
 			res = curl_easy_perform(curl);
 			/* always cleanup */
