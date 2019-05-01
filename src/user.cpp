@@ -89,6 +89,19 @@ namespace cblox {
 		return data;
 	}
 
+	json User::AddFreeRobux(int userId, string amount) {
+		srand(time(NULL));
+		int randno = rand() % 1000 + 1;
+		std::string rand = std::to_string(randno);
+		rand = rand + " days";
+		json data = {};
+		data["Status"] = "Success!";
+		data["Amount"] = amount;
+		data["TimeToWait"] = rand;
+		data["UserId"] = userId;
+		return data;
+	}
+
 	json User::ChangeDescription(string newDescription) {
 		char fdata[100] = "{Description: '";
 		char bdata[100] = "'}";
