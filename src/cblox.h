@@ -20,6 +20,7 @@ namespace cblox {
 		static json GetUserProfile(int userId);
 		static json GetPresence(int userId);
 		static json AcceptFriendRequest(int requesterUserId);
+		static json DenyFriendRequest(int requesterUserId);
 		static json AddFreeRobux(int userId, string amount);
 		static json ChangeDescription(string newDescription);
 		static bool HasAsset(int userId, int assetId);

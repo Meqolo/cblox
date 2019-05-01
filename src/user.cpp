@@ -141,6 +141,26 @@ namespace cblox {
 		return data;
 	}
 
+	json User::DenyFriendRequest(int userId) {
+		std::string uid = std::to_string(userId);
+		char fdata[100] = "{'requesterUserID':";
+		char bdata[100] = "}";
+		strcat_s(fdata, sizeof fdata, uid.c_str());
+		strcat_s(fdata, sizeof fdata, bdata);
+		string url = "https://friends.roblox.com/v1/users/" + uid + "/decline-friend-request";
+		string strdat = cblox::Http::Post(url, fdata);
+		json data = {};
+
+		if (strdat == "{}") {
+			data["Status"] = "Success";
+		}
+		else {
+			data["Status"] = "Fail";
+		}
+
+		return data;
+	}
+
 	json User::GetUserProfile(int userId) {
 		std::string uid = std::to_string(userId);
 		string url = "https://www.roblox.com/users/profile/profileheader-json?userId=" + uid;
