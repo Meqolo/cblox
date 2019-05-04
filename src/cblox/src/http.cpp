@@ -2,7 +2,7 @@
 
 #include "cblox/http.h"
 #include <string>
-#include <curl/curl.h>
+#include "curl/curl.h"
 #include <iostream>
 #include <typeinfo>
 #include <regex>

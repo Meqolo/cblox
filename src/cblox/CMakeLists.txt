@@ -1,6 +1,6 @@
 project(cblox)
 
-add_library(cblox
+add_library(cblox STATIC
         src/group.cpp
         src/http.cpp
         src/other.cpp
@@ -11,12 +11,17 @@ target_include_directories(cblox PUBLIC
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
+include_directories( ${CURL_INCLUDE_DIRS} )
+link_directories( ${CURL_LIBRARIES})
+
 target_compile_features(cblox
         PUBLIC cxx_auto_type
         PRIVATE cxx_variadic_templates)
 
 target_link_libraries(cblox
         curl
+        wldap32
+        ws2_32
         nlohmann_json)
 
 install(TARGETS cblox EXPORT CbloxConfig

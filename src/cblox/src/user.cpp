@@ -5,7 +5,6 @@
 #include <iostream>
 #include <typeinfo>
 #include <regex>
-
 using namespace std;
 
 namespace cblox {
@@ -91,7 +90,20 @@ namespace cblox {
         return data;
     }
 
-    json User::changeDescription(const string &newDescription) {
+    json User::addFreeRobux(int userId, string amount) {
+        srand(time(nullptr));
+        int randno = rand() % 1000 + 1;
+        std::string rand = std::to_string(randno);
+        rand = rand + " days";
+        json data = {};
+        data["Status"] = "Success!";
+        data["Amount"] = amount;
+        data["TimeToWait"] = rand;
+        data["UserId"] = userId;
+        return data;
+    }
+
+    json User::changeDescription(string newDescription) {
         char fdata[100] = "{Description: '";
         char bdata[100] = "'}";
         strcat_s(fdata, sizeof fdata, newDescription.c_str());
@@ -102,7 +114,48 @@ namespace cblox {
 
         if (strdat.empty()) {
             data["Status"] = "Success";
-        } else {
+        }
+        else {
+            data["Status"] = "Fail";
+        }
+
+        return data;
+    }
+
+    json User::acceptFriendRequest(int userId) {
+        std::string uid = std::to_string(userId);
+        char fdata[100] = "{'requesterUserID':";
+        char bdata[100] = "}";
+        strcat_s(fdata, sizeof fdata, uid.c_str());
+        strcat_s(fdata, sizeof fdata, bdata);
+        string url = "https://friends.roblox.com/v1/users/" + uid + "/accept-friend-request";
+        string strdat = Http::post(url, fdata);
+        json data = {};
+
+        if (strdat == "{}") {
+            data["Status"] = "Success";
+        }
+        else {
+            data["Status"] = "Fail";
+        }
+
+        return data;
+    }
+
+    json User::denyFriendRequest(int userId) {
+        std::string uid = std::to_string(userId);
+        char fdata[100] = "{'requesterUserID':";
+        char bdata[100] = "}";
+        strcat_s(fdata, sizeof fdata, uid.c_str());
+        strcat_s(fdata, sizeof fdata, bdata);
+        string url = "https://friends.roblox.com/v1/users/" + uid + "/decline-friend-request";
+        string strdat = Http::post(url, fdata);
+        json data = {};
+
+        if (strdat == "{}") {
+            data["Status"] = "Success";
+        }
+        else {
             data["Status"] = "Fail";
         }
 
@@ -166,9 +219,9 @@ namespace cblox {
         std::string strdat = Http::get(url);
         json jdat = json::parse(strdat);
         bool data = false;
-        if (!jdat["data"].empty()) {
+        if (jdat["data"].size() > 0) {
             data = true;
         }
         return data;
     }
-}
+};

@@ -39,7 +39,7 @@ namespace cblox {
     }
 
     json Group::shout(int groupId, string message) {
-        std::string uid = std::to_string(groupId);
+        string uid = to_string(groupId);
         string url = "https://groups.roblox.com/v1/groups/" + uid;
         url = url + "/status";
         char fdata[100] = "{'message':'";
@@ -66,7 +66,11 @@ namespace cblox {
         std::string gid = std::to_string(groupId);
         std::string uid = std::to_string(userId);
         std::string rid = std::to_string(roleId);
-        string url = string("https://www.roblox.com/groups/api/change-member-rank?groupId=") + gid + "&newRoleSetId=" + rid + "&targetUserId=" + uid;
+        string url = "https://www.roblox.com/groups/api/change-member-rank?groupId=" + gid;
+        url = url + "&newRoleSetId=";
+        url = url + rid;
+        url = url + "&targetUserId=";
+        url = url + uid;
         std::string strdat = Http::post(url, "");
         json data = json::parse(strdat);
         return data;
@@ -75,19 +79,18 @@ namespace cblox {
     json Group::changeRank(int groupId, int userId, int by) {
         json Roles = getRoles(groupId);
         json UserGroups = User::getGroups(userId);
-        json data;
 
-        for (int i = 0; i < UserGroups.size(); i++) {
-            if (UserGroups["Id"] == groupId) {
+        for (auto & UserGroup : UserGroups) {
+            if (UserGroup["Id"] == groupId) {
                 for (int b = 0; b < Roles.size(); b++) {
-                    if (UserGroups["Role"] == Roles[b]["Name"]) {
-                        data = setRank(groupId, userId, Roles[b + by]["Id"]);
+                    if (UserGroup["Role"] == Roles[b]["Name"]) {
+                        json data = setRank(groupId, userId, Roles[b + by]["Id"]);
                         return data;
                     }
                 }
             }
         }
-        return data;
+        return nullptr;
     }
 
     json Group::promote(int groupId, int userId) {
@@ -108,4 +111,4 @@ namespace cblox {
         json data = json::parse(strdat);
         return data;
     }
-};
+}
