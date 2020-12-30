@@ -45,12 +45,27 @@ namespace cblox {
 		static json SearchGroups(string keyword);
 		static json SearchUsers(string keyword);
 	};
-	class Http {
-	public:
-		static string Get(string url);
-		static string Post(string url, string ndata);
-		static string Patch(string url, string ndata);
-		static void UpdateXcsrf();
-		static void Login(string cookie);
-	};
-}
+	// class Http {
+	// public:
+	// 	static string Get(string url);
+	// 	static string Post(string url, string ndata);
+	// 	static string Patch(string url, string ndata);
+	// 	static void UpdateXcsrf();
+	// 	static void Login(string cookie);
+	// };
+
+namespace Http {
+
+extern std::string Cookie;
+extern std::string Xcsrf;
+
+std::string Get(const std::string& url);
+std::string Post(const std::string& url, const std::string& ndata);
+std::string Patch(const std::string& url, const std::string& ndata);
+
+void UpdateXcsrf();
+void Login(const std::string& cookie);
+
+} // namespace Http
+
+} // namespace cblox

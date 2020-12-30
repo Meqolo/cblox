@@ -1,5 +1,6 @@
 #include "cblox.h"
 #include <string>
+#include <cstring>
 #include <curl/curl.h>
 #include <iostream>
 #include <typeinfo>
@@ -42,9 +43,14 @@ namespace cblox {
 		char fdata[100] = "{'message':'";
 		char bdata[100];
 		char cdata[100] = "'}";
-		strcpy_s(bdata, sizeof bdata, message.c_str());
-		strcat_s(fdata, sizeof fdata, bdata);
-		strcat_s(fdata, sizeof fdata, cdata);
+
+		// strcpy_s(bdata, sizeof bdata, message.c_str());
+		std::snprintf(bdata, sizeof(bdata), "%s", message.c_str());
+		// strcat_s(fdata, sizeof fdata, bdata);
+		std::strncat(fdata, bdata, sizeof(fdata) - std::strlen(fdata) - 1);
+		// strcat_s(fdata, sizeof fdata, cdata);
+		std::strncat(fdata, cdata, sizeof(fdata) - std::strlen(fdata) - 1);
+
 		std::string strdat = cblox::Http::Patch(url, fdata);
 		json data = json::parse(strdat);
 		return data;
