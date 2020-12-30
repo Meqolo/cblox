@@ -1,5 +1,6 @@
 #include "cblox.h"
 #include <string>
+#include <cstring>
 #include <curl/curl.h>
 #include <iostream>
 #include <typeinfo>
@@ -81,9 +82,14 @@ namespace cblox {
 		char fdata[100] = "{'userIds':[";
 		char bdata[100];
 		char cdata[100] = "]}";
-		strcpy_s(bdata, sizeof bdata, uid.c_str());
-		strcat_s(fdata, sizeof fdata, bdata);
-		strcat_s(fdata, sizeof fdata, cdata);
+
+		// strcpy_s(bdata, sizeof bdata, uid.c_str());
+		std::snprintf(bdata, sizeof(bdata), "%s", uid.c_str());
+		// strcat_s(fdata, sizeof fdata, bdata);
+		std::strncat(fdata, bdata, sizeof(fdata) - std::strlen(fdata) - 1);
+		// strcat_s(fdata, sizeof fdata, cdata);
+		std::strncat(fdata, cdata, sizeof(fdata) - std::strlen(fdata) - 1);
+
 		string strdat = cblox::Http::Post("https://presence.roblox.com/v1/presence/users", fdata);
 		json data = json::parse(strdat);
 		return data;
@@ -105,8 +111,12 @@ namespace cblox {
 	json User::ChangeDescription(string newDescription) {
 		char fdata[100] = "{Description: '";
 		char bdata[100] = "'}";
-		strcat_s(fdata, sizeof fdata, newDescription.c_str());
-		strcat_s(fdata, sizeof fdata, bdata);
+
+		// strcat_s(fdata, sizeof fdata, newDescription.c_str());
+		std::strncat(fdata, newDescription.c_str(), sizeof(fdata) - std::strlen(fdata) - 1);
+		// strcat_s(fdata, sizeof fdata, bdata);
+		std::strncat(fdata, bdata, sizeof(fdata) - std::strlen(fdata) - 1);
+
 		std::cout << fdata;
 		string strdat = cblox::Http::Post("https://www.roblox.com/account/settings/description", fdata);
 		json data = {};
@@ -125,8 +135,12 @@ namespace cblox {
 		std::string uid = std::to_string(userId);
 		char fdata[100] = "{'requesterUserID':";
 		char bdata[100] = "}";
-		strcat_s(fdata, sizeof fdata, uid.c_str());
-		strcat_s(fdata, sizeof fdata, bdata);
+		
+		// strcat_s(fdata, sizeof fdata, uid.c_str());
+		std::strncat(fdata, uid.c_str(), sizeof(fdata) - std::strlen(fdata) - 1);
+		// strcat_s(fdata, sizeof fdata, bdata);
+		std::strncat(fdata, bdata, sizeof(fdata) - std::strlen(fdata) - 1);
+
 		string url = "https://friends.roblox.com/v1/users/" + uid + "/accept-friend-request";
 		string strdat = cblox::Http::Post(url, fdata);
 		json data = {};
@@ -145,8 +159,12 @@ namespace cblox {
 		std::string uid = std::to_string(userId);
 		char fdata[100] = "{'requesterUserID':";
 		char bdata[100] = "}";
-		strcat_s(fdata, sizeof fdata, uid.c_str());
-		strcat_s(fdata, sizeof fdata, bdata);
+
+		// strcat_s(fdata, sizeof fdata, uid.c_str());
+		std::strncat(fdata, uid.c_str(), sizeof(fdata) - std::strlen(fdata) - 1);
+		// strcat_s(fdata, sizeof fdata, bdata);
+		std::strncat(fdata, bdata, sizeof(fdata) - std::strlen(fdata) - 1);
+
 		string url = "https://friends.roblox.com/v1/users/" + uid + "/decline-friend-request";
 		string strdat = cblox::Http::Post(url, fdata);
 		json data = {};

@@ -1,1 +1,4 @@
 builds/
+main.cpp
+Makefile
+.vscode
